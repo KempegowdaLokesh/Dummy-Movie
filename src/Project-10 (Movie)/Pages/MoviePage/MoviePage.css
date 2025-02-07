@@ -3,6 +3,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: white;
+    color: black;
     padding: 20px;
     font-family: Arial, sans-serif;
 }
@@ -193,7 +195,7 @@
     }
 }
 
-@media (max-width: 1024px) and (min-width: 769px) {
+@media (max-width: 1079px) and (min-width: 769px) {
     @media (prefers-color-scheme: dark) {
         .movie-images img {
             max-width: 75%;

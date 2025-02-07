@@ -13,6 +13,7 @@ const MoviePage = () => {
     const [isTrailerOpen, setIsTrailerOpen] = useState(false);
     const navigate = useNavigate();
     const { id } = useParams();
+    const { isDarkMode } = useDarkMode();
     const image_url = "https://image.tmdb.org/t/p/original";
 
     const opts = {
@@ -77,17 +78,8 @@ const MoviePage = () => {
             document.webkitExitFullscreen?.();
             document.msExitFullscreen?.();
         }
-    };
-
-    const MoviePage = () => {
-        const { isDarkMode } = useDarkMode();
-    
-        return (
-            <div className={`movie-container ${isDarkMode ? "dark" : ""}`}>
-                {/* Rest of the code */}
-            </div>
-        );
-    };
+    };    
+     
 
     return (
         <div className={`movie-container ${isDarkMode ? "dark" : ""}`}>
