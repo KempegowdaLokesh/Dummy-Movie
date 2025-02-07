@@ -6,6 +6,8 @@ import CastDetails from "./Project-10 (Movie)/Pages/Cast/CastDetails";
 import MoviePage from "./Project-10 (Movie)/Pages/MoviePage/MoviePage";
 import Home from "./Project-10 (Movie)/Pages/Home/Home";
 import LoginPage from "./Project-10 (Movie)/Pages/Login/Login"; // Import LoginPage
+import About from "./Project-10 (Movie)/Pages/About/About"; // Import About Page
+import Contact from "./Project-10 (Movie)/Pages/Contact/Contact"; // Import Contact Page
 import { DarkModeProvider } from "../src/context/DarkModeContext";
 
 // Protected Route Component
@@ -41,6 +43,8 @@ const App = () => {
                       <Route path="/" element={<ProtectedRoute element={<Home />} />} />
                       <Route path="/movie/:id" element={<ProtectedRoute element={<MoviePage />} />} />
                       <Route path="/cast/:castId" element={<ProtectedRoute element={<CastDetails />} />} />
+                      <Route path="/about" element={<ProtectedRoute element={<About />} />}/>
+                      <Route path="/contact" element={<ProtectedRoute element={<Contact />} />}/>
                     </Routes>
                   </div>
                   <Footer />
@@ -57,3 +61,6 @@ const App = () => {
 };
 
 export default App;
+
+// Ensure you create a "public/_redirects" file with the following content:
+// /* /index.html 200

@@ -9,18 +9,28 @@ const LoginPage = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // If already logged in, redirect to home
-    if (localStorage.getItem("isLoggedIn") === "true") {
-      navigate("/"); // Redirect to home
+    // Ensure user is redirected to login if not logged in
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (isLoggedIn !== "true") {
+      navigate("/login", { replace: true });
     }
   }, [navigate]);
+
+  useEffect(() => {
+    // Logout user when they close the tab or browser
+    const handleUnload = () => {
+      localStorage.removeItem("isLoggedIn");
+    };
+    window.addEventListener("beforeunload", handleUnload);
+    return () => window.removeEventListener("beforeunload", handleUnload);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username === "Kempegowda Lokesh" && password === "Lokesh@143") {
       localStorage.setItem("isLoggedIn", "true");
-      setIsLoggedIn(true); // Set the login state to true
-      navigate("/"); // Redirect to homepage after login
+      setIsLoggedIn(true);
+      navigate("/");
     } else {
       setError("Invalid username or password");
     }
@@ -31,31 +41,31 @@ const LoginPage = ({ setIsLoggedIn }) => {
       <div className="login-box">
         <h2>Login</h2>
         {error && <p className="error">{error}</p>}
-        <form onSubmit={handleSubmit} autoComplete="on"> {/* Added autoComplete here */}
+        <form onSubmit={handleSubmit} autoComplete="on">
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <input
               type="text"
-              id="username" // Added the id attribute
-              name="username" // Added the name attribute
+              id="username"
+              name="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
               required
-              autoComplete="username" // Added autoComplete for username
+              autoComplete="username"
             />
           </div>
           <div className="input-group">
             <label htmlFor="password">Password</label>
             <input
               type="password"
-              id="password" // Added the id attribute
-              name="password" // Added the name attribute
+              id="password"
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               required
-              autoComplete="current-password" // Added autoComplete for password
+              autoComplete="current-password"
             />
           </div>
           <button type="submit" className="login-btn">Login</button>

@@ -1,37 +1,42 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import { useDarkMode } from '../../../context/DarkModeContext';
-import Loader from '../../Components/Loader/Loader';
+import Loader from '../../Components/Loader/Loader'; // Import the Loader component
 
-const Navbar = ({ resetPagination }) => {
+const Navbar = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [isMenuActive, setIsMenuActive] = useState(false);
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // Add loading state
+  const [showDropdown, setShowDropdown] = useState(false);
+
   const navigate = useNavigate();
-  const location = useLocation();
 
   const toggleMenu = () => {
     setIsMenuActive((prev) => !prev);
   };
 
+  const closeMenu = () => {
+    setIsMenuActive(false);
+  };
+
   const handleSearchChange = (e) => {
-    const query = e.target.value;
-    setSearch(query);
-    navigate(query.trim() ? `/?search=${encodeURIComponent(query)}` : '/');
+    setSearch(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    if (e.key === 'Enter' && search.trim()) {
+      navigate(`/?search=${encodeURIComponent(search)}`);
+      closeMenu(); // Close menu on search submit
+    }
   };
 
   const handleLinkClick = (path) => {
     if (path === "/") {
-      setSearch(""); // Clear search input
-      resetPagination(); // Reset pagination to page 1
-
-      if (location.pathname === "/") {
-        window.location.reload(); // Reload only if already on home
-      } else {
-        navigate("/", { replace: true });
-      }
+      setSearch(""); // Clear search input when navigating home
+      navigate("/", { replace: true }); // Always navigate home
+      closeMenu(); // Close menu on selection
       return;
     }
 
@@ -39,20 +44,20 @@ const Navbar = ({ resetPagination }) => {
     setTimeout(() => {
       navigate(path);
       setLoading(false);
+      closeMenu(); // Close menu after navigation
     }, 1000);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    navigate("/login");
+    localStorage.removeItem("isLoggedIn"); // Remove login status
+    navigate("/login"); // Redirect to login page
   };
 
   return (
     <nav className={`navbar ${isDarkMode ? 'dark' : ''}`}>
-      <Link className="logo animated-logo" to="/" onClick={() => handleLinkClick('/')}>
-        🎞️ ScreenTrail
-      </Link>
+      <Link className="logo animated-logo" to="/" onClick={() => handleLinkClick('/')}>🎞️ ScreenTrail</Link>
 
+      {/* Show Loader when loading */}
       {loading && <Loader />}
 
       <div className={`menu ${isMenuActive ? 'active' : ''}`}>
@@ -64,6 +69,7 @@ const Navbar = ({ resetPagination }) => {
           placeholder="Search for a movie"
           value={search}
           onChange={handleSearchChange}
+          onKeyDown={handleSearchSubmit} // Close menu when pressing Enter
           className="search-input"
         />
         <ul>
@@ -73,17 +79,31 @@ const Navbar = ({ resetPagination }) => {
         </ul>
       </div>
 
+      <button className="logout-btn" onClick={handleLogout}>Logout</button>
+
+      <div className="user-profile" onClick={() => setShowDropdown(!showDropdown)}>
+        <span className="user-icon">👤</span>
+        {showDropdown && (
+          <div className="dropdown-menu">
+            <li onClick={handleLogout}>Logout</li>
+          </div>
+        )}
+      </div>
+
+      <button onClick={toggleDarkMode} className="icon-dark-mode-toggle">
+        {isDarkMode ? '🌞' : '🌙'}
+      </button>
+
+      <button onClick={toggleDarkMode} className="dark-mode-toggle">
+        {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+      </button>
+
       <div className="menu-toggle" onClick={toggleMenu}>
         <span className="bar"></span>
         <span className="bar"></span>
         <span className="bar"></span>
       </div>
 
-      <button className="logout-btn" onClick={handleLogout}>Logout</button>
-
-      <button onClick={toggleDarkMode} className="dark-mode-toggle">
-        {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-      </button>
     </nav>
   );
 };
