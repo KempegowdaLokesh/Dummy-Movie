@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom"; 
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Home.css";
 import Pagination from "../../Components/Pagination/Pagination";
 import Card from "../../Components/Card/Card";
 import Loader from "../../Components/Loader/Loader";
+import { useDarkMode } from "../../../context/DarkModeContext"; // Import
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -12,10 +13,11 @@ const Home = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const { isDarkMode } = useDarkMode(); // Get dark mode state
 
   const api_key = "7ddeab7e9f7c99d207e10ac678bc4553";
   const Base_Url = "https://api.themoviedb.org/3";
-  const image_url = "https://image.tmdb.org/t/p/original"; 
+  const image_url = "https://image.tmdb.org/t/p/original";
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -68,8 +70,7 @@ const Home = () => {
   };
 
   return (
-    <div className="home-container">
-      {/* <h1 className="home-head">Discover Movies Based on Your Search...</h1> */}
+    <div className={`home-container ${isDarkMode ? "dark" : ""}`}>
       <h1 className="home-head">Movies That Fit Your Search Criteria....</h1>
       {loading ? (
         <Loader showText={false} />
@@ -97,5 +98,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;

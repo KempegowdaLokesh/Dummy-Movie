@@ -5,30 +5,20 @@ const DarkModeContext = createContext();
 
 // Provider to manage dark mode globally
 export const DarkModeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Set default theme based on localStorage or default to light mode
-  useEffect(() => {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark-mode') {
-      setIsDarkMode(true);
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.add('light-mode'); // Default to light mode
-    }
-  }, []);
+    if (savedTheme) return savedTheme === 'dark-mode';
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
+  useEffect(() => {
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    document.body.classList.toggle('light-mode', !isDarkMode);
+    localStorage.setItem('theme', isDarkMode ? 'dark-mode' : 'light-mode');
+  }, [isDarkMode]);
 
   const toggleDarkMode = () => {
     setIsDarkMode((prevMode) => !prevMode);
-    if (!isDarkMode) {
-      document.body.classList.add('dark-mode');
-      document.body.classList.remove('light-mode');
-      localStorage.setItem('theme', 'dark-mode');
-    } else {
-      document.body.classList.add('light-mode');
-      document.body.classList.remove('dark-mode');
-      localStorage.setItem('theme', 'light-mode');
-    }
   };
 
   return (

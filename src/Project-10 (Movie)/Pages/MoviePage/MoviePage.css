@@ -119,11 +119,29 @@
     cursor: pointer;
 }
 
+.dark {
+    background-color: black;
+    color: white;
+}
+
+.dark .movie-card h3 {
+    color: white;
+}
+
+.dark .pagination button {
+    background-color: grey;
+}
+
+.dark .pagination span {
+    color: white;
+}
+
+
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
     body {
-        background-color: #121212;
-        color: #fff;
+        background-color: black;
+        color: white;
     }
     
     .movie-info p, .cast-item .cast-character {
@@ -142,8 +160,8 @@
 /* Light Mode Support */
 @media (prefers-color-scheme: light) {
     body {
-        background-color: #fff;
-        color: #000;
+        background-color: white;
+        color: black;
     }
     
     .movie-info p, .cast-item .cast-character {
@@ -160,6 +178,21 @@
 }
 
 /* Responsive Dark Mode Adjustments */
+@media (max-width: 2412px) and (min-width: 1080px) {
+    .home-container, .movie-container {
+        max-width: 90%;
+        margin: auto;
+    }
+
+    .movie-card {
+        width: 220px;
+    }
+
+    .movie-images img {
+        max-width: 60%;
+    }
+}
+
 @media (max-width: 1024px) and (min-width: 769px) {
     @media (prefers-color-scheme: dark) {
         .movie-images img {

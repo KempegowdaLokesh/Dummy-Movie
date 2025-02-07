@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Youtube from "react-youtube";
 import Loader from "../../Components/Loader/Loader";
 import "./MoviePage.css";
+import { useDarkMode } from "../../../context/DarkModeContext";
 
 const MoviePage = () => {
     const [specificMovie, setSpecificMovie] = useState({});
@@ -78,8 +79,18 @@ const MoviePage = () => {
         }
     };
 
+    const MoviePage = () => {
+        const { isDarkMode } = useDarkMode();
+    
+        return (
+            <div className={`movie-container ${isDarkMode ? "dark" : ""}`}>
+                {/* Rest of the code */}
+            </div>
+        );
+    };
+
     return (
-        <div className="movie-container">
+        <div className={`movie-container ${isDarkMode ? "dark" : ""}`}>
             {loading ? (
                 <Loader showText={false} />
             ) : (

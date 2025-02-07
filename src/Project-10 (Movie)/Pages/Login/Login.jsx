@@ -9,26 +9,28 @@ const LoginPage = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Ensure user is redirected to login if not logged in
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (isLoggedIn !== "true") {
+    // Redirect to login page if not logged in
+    if (sessionStorage.getItem("isLoggedIn") !== "true") {
       navigate("/login", { replace: true });
     }
   }, [navigate]);
 
   useEffect(() => {
-    // Logout user when they close the tab or browser
-    const handleUnload = () => {
-      localStorage.removeItem("isLoggedIn");
-    };
+    // Logout when tab/browser is closed
+    const handleUnload = () => sessionStorage.removeItem("isLoggedIn");
     window.addEventListener("beforeunload", handleUnload);
     return () => window.removeEventListener("beforeunload", handleUnload);
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (username === "Kempegowda Lokesh" && password === "Lokesh@143") {
-      localStorage.setItem("isLoggedIn", "true");
+    const trimmedUsername = username.trim().toLowerCase();
+    const trimmedPassword = password.trim();
+
+    console.log("Attempting login with:", trimmedUsername, "********"); // Hides password in logs
+
+    if (trimmedUsername === "kempegowda lokesh" && trimmedPassword === "Lokesh@143") {
+      sessionStorage.setItem("isLoggedIn", "true");
       setIsLoggedIn(true);
       navigate("/");
     } else {
@@ -41,7 +43,7 @@ const LoginPage = ({ setIsLoggedIn }) => {
       <div className="login-box">
         <h2>Login</h2>
         {error && <p className="error">{error}</p>}
-        <form onSubmit={handleSubmit} autoComplete="on">
+        <form onSubmit={handleSubmit} autoComplete="off">
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <input
@@ -52,7 +54,9 @@ const LoginPage = ({ setIsLoggedIn }) => {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
               required
-              autoComplete="username"
+              autoComplete="off"
+              readOnly
+              onFocus={(e) => e.target.removeAttribute("readOnly")} // Prevents autofill
             />
           </div>
           <div className="input-group">
@@ -65,7 +69,9 @@ const LoginPage = ({ setIsLoggedIn }) => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               required
-              autoComplete="current-password"
+              autoComplete="new-password" // Prevents previous suggestions
+              readOnly
+              onFocus={(e) => e.target.removeAttribute("readOnly")} // Prevents autofill
             />
           </div>
           <button type="submit" className="login-btn">Login</button>

@@ -46,6 +46,22 @@
   color: #333;
 }
 
+.dark {
+    background-color: black;
+    color: white;
+}
+
+.dark .movie-card h3 {
+    color: white;
+}
+
+.dark .pagination button {
+    background-color: grey;
+}
+
+.dark .pagination span {
+    color: white;
+}
 
 /* Dark Mode Styles */
 body.dark-mode .pagination button {
@@ -66,18 +82,23 @@ body.dark-mode .pagination {
 /* Responsive Design */
 
 /* For large screens (desktops, tablets in landscape mode) */
-@media (max-width: 2412px) and (min-width: 1081px) {
-  .movie-list {
-    gap: 15px;
+@media (max-width: 2412px) and (min-width: 1080px) {
+  .home-container, .movie-container {
+      max-width: 90%;
+      margin: auto;
   }
 
   .movie-card {
-    width: 220px;
+      width: 220px;
+  }
+
+  .movie-images img {
+      max-width: 60%;
   }
 }
 
 /* For medium screens (tablets in landscape, small desktops) */
-@media (max-width: 1080px) and (min-width: 768px) {
+@media (max-width: 1079px) and (min-width: 768px) {
   .movie-list {
     gap: 15px;
   }
